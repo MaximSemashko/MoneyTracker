@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_pattern"
+    tools:context="com.loftschool.AddItemActivity">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:background="@color/textColorWhite"
+        android:layout_width="match_parent"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
+        android:gravity="center_vertical"
+        android:layout_height="68dp">
+
+        <EditText
+            android:id="@+id/item_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/itemName"
+            android:maxLines="1"
+            android:inputType="text"
+            android:layout_weight="1"
+            android:background="@null"/>
+        <EditText
+            android:id="@+id/item_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:gravity="right"
+            android:maxLines="1"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:hint="@string/itemPrice"
+            android:background="@null"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="@string/dollar_item"/>
+        <Button
+            android:enabled="false"
+            android:id="@+id/item_add"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:background="@drawable/ic_add"
+            android:layout_marginLeft="22dp"/>
+    </LinearLayout>
+</LinearLayout>
+
