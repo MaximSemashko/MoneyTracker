@@ -25,7 +25,6 @@ public class AddItemActivity extends AppCompatActivity {
         mItemPrice=findViewById(R.id.item_price);
         mItemAdd=findViewById(R.id.item_add);
 
-        setTitle(R.string.add_item_title);
 
         mItemName.addTextChangedListener(new TextWatcher() {
             @Override
