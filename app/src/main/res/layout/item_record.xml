@@ -10,7 +10,7 @@
     android:layout_marginBottom="5dp">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/record_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="Milk"
@@ -18,17 +18,17 @@
         android:padding="16dp"
         android:gravity="center"
         android:textColor="@color/textColorWhite"
-        tools:background="@color/colorItem"
+        android:background="@color/colorItem"
         />
     <TextView
-        android:id="@+id/price"
+        android:id="@+id/record_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="1.5$"
         android:padding="16dp"
         android:gravity="center"
         android:textColor="@color/textColorWhite"
-        tools:background="@color/colorItemDark"
+        android:background="@color/colorItemDark"
         />
 
 </LinearLayout>

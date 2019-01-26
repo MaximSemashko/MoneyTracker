@@ -1,24 +1,25 @@
 package com.loftschool;
 
 public class Record {
-    private final float mPrice;
-    private final String mTitle;
-    private String mComment;
 
-    public float getPrice() {
-        return mPrice;
+    private final String title;
+    private final float price;
+    private String comment;
+
+    public Record(String title, float price) {
+        this.title = title;
+        this.price = price;
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
+    }
+
+    public float getPrice() {
+        return price;
     }
 
     public String getComment() {
-        return mComment;
-    }
-
-    public Record(String title, float price) {
-        mTitle = title;
-        mPrice = price;
+        return comment;
     }
 }

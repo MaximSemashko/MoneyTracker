@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class ItemListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items_list);
-
+        setTitle(R.string.budget);
 
         mRecyclerView = findViewById(R.id.item_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -43,7 +41,7 @@ public class ItemListActivity extends AppCompatActivity {
         mData.add(new Record("Eggs",3));
         mData.add(new Record("Water",1));
         mData.add(new Record("Bear",2));
-       // mData.add(new Record("Chocolate", (float) 2.3));
+        mData.add(new Record("Chocolate", (float) 2.3));
         mData.add(new Record("asd",1));
         mData.add(new Record("Courses",10));
     }
@@ -54,7 +52,7 @@ public class ItemListActivity extends AppCompatActivity {
         public RecordViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
             Log.d(TAG, "onCreateViewHolder: "+viewGroup.getChildCount());
             View view = LayoutInflater.from(viewGroup.getContext())
-                   .inflate(R.layout.item_record,viewGroup,false);
+                    .inflate(R.layout.item_record,viewGroup,false);
             return new RecordViewHolder(view);
         }
 
@@ -79,8 +77,8 @@ public class ItemListActivity extends AppCompatActivity {
 
         public RecordViewHolder(@NonNull View itemView) {
             super(itemView);
-            mItemTitle=itemView.findViewById(R.id.title);
-            mItemPrice=itemView.findViewById(R.id.price);
+            mItemTitle=itemView.findViewById(R.id.record_title);
+            mItemPrice=itemView.findViewById(R.id.record_price);
         }
         public void applyData(Record record){
             Log.d(TAG, "applyData: "+mRecyclerView.getChildLayoutPosition(itemView)+" "+record);
