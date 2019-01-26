@@ -44,6 +44,22 @@ public class ItemListActivity extends AppCompatActivity {
         mData.add(new Record("Chocolate", (float) 2.3));
         mData.add(new Record("asd",1));
         mData.add(new Record("Courses",10));
+        mData.add(new Record("Milk",1));
+        mData.add(new Record("Bread",4));
+        mData.add(new Record("Eggs",3));
+        mData.add(new Record("Water",1));
+        mData.add(new Record("Bear",2));
+        mData.add(new Record("Chocolate", (float) 2.3));
+        mData.add(new Record("asd",1));
+        mData.add(new Record("Courses",10));
+        mData.add(new Record("Milk",1));
+        mData.add(new Record("Bread",4));
+        mData.add(new Record("Eggs",3));
+        mData.add(new Record("Water",1));
+        mData.add(new Record("Bear",2));
+        mData.add(new Record("Chocolate", (float) 2.3));
+        mData.add(new Record("asd",1));
+        mData.add(new Record("Courses",10));
     }
 
     private class ItemListAdapter extends RecyclerView.Adapter<RecordViewHolder>{
@@ -83,7 +99,9 @@ public class ItemListActivity extends AppCompatActivity {
         public void applyData(Record record){
             Log.d(TAG, "applyData: "+mRecyclerView.getChildLayoutPosition(itemView)+" "+record);
             mItemTitle.setText(record.getTitle());
-            mItemPrice.setText(String.valueOf(record.getPrice()));
+            String strPrice = getResources().getString(R.string.price_pattern);
+            String priceFinal  = String.format(strPrice,String.valueOf(record.getPrice()));
+            mItemPrice.setText(priceFinal);
         }
     }
 }

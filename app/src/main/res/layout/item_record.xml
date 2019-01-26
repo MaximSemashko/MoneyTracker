@@ -17,6 +17,7 @@
         android:layout_weight="1"
         android:padding="16dp"
         android:gravity="center"
+        android:textSize="20sp"
         android:textColor="@color/textColorWhite"
         android:background="@color/colorItem"
         />
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content"
         tools:text="1.5$"
         android:padding="16dp"
+        android:textSize="20sp"
         android:gravity="center"
         android:textColor="@color/textColorWhite"
         android:background="@color/colorItemDark"
