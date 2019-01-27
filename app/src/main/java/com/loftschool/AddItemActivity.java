@@ -1,7 +1,7 @@
 package com.loftschool;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,12 +20,12 @@ public class AddItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_additem);
+        setTitle(R.string.add_item_title);
 
         mItemName=findViewById(R.id.item_name);
         mItemPrice=findViewById(R.id.item_price);
         mItemAdd=findViewById(R.id.item_add);
 
-        setTitle(R.string.add_item_title);
 
         mItemName.addTextChangedListener(new TextWatcher() {
             @Override
