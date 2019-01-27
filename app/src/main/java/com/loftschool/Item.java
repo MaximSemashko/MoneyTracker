@@ -1,12 +1,11 @@
 package com.loftschool;
 
-public class Record {
+public class Item {
 
     private final String title;
     private final float price;
-    private String comment;
 
-    public Record(String title, float price) {
+    public Item(String title, float price) {
         this.title = title;
         this.price = price;
     }
@@ -19,7 +18,4 @@ public class Record {
         return price;
     }
 
-    public String getComment() {
-        return comment;
-    }
 }
