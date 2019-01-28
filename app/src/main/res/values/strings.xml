@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">MoneyTracker</string>
 
-    <string name="add_item_title">New record</string>
+    <string name="add_item_title">New item</string>
     <string name="itemName">Name</string>
     <string name="itemPrice">0</string>
     <string name="dollar_item">$</string>
     <string name="budget">Budget</string>
     <string name="price_pattern">%1$s $</string>
+    <string name="costs">Costs</string>
+    <string name="incomes">Incomes</string>
+    <string name="balanse">Balanse</string>
 </resources>
