@@ -11,6 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class ItemListFragment extends Fragment {
+
+    public static ItemListFragment createItemsFragment(int type){
+        ItemListFragment fragment = new ItemListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(TYPE_KEY, TYPE_INCOMES);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+    public static final int TYPE_INCOMES = 1;
+    public static final int TYPE_COSTS = 2;
+    public static final int TYPE_BALANSE = 3;
+    public static final int TYPE_UNKNOWN = -1;
+    public static final String TYPE_KEY = "type";
+    private int type = TYPE_INCOMES;
+
     private RecyclerView mRecyclerView;
     private ItemListAdapter mAdapter;
 
@@ -19,6 +34,11 @@ public class ItemListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mAdapter= new ItemListAdapter();
 
+        Bundle bundle=getArguments();
+        type = bundle.getInt(TYPE_KEY,TYPE_UNKNOWN);
+
+        if(type==TYPE_UNKNOWN)
+            throw new IllegalArgumentException("Unknown type");
     }
 
     @Nullable
