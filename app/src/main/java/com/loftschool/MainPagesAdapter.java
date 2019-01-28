@@ -1,19 +1,44 @@
 package com.loftschool;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import static com.loftschool.ItemListFragment.TYPE_BALANSE;
+import static com.loftschool.ItemListFragment.TYPE_COSTS;
+import static com.loftschool.ItemListFragment.TYPE_INCOMES;
+
 public class MainPagesAdapter extends FragmentPagerAdapter {
-    public MainPagesAdapter(FragmentManager fm) {
+    private static final int PAGE_INCOMES = 0;
+    private static final int PAGE_COSTS = 1;
+    private static final int PAGE_BALANSE = 2;
+
+    private String [] mTabTitles;
+
+    public MainPagesAdapter(FragmentManager fm, Context context) {
         super(fm);
+
+        mTabTitles=context.getResources().getStringArray(R.array.tab_title);
+
     }
 
     @Override
     public Fragment getItem(int i) {
-        Fragment fragment = new ItemListFragment();
-        return fragment;
+        switch (i){
+            case PAGE_INCOMES:{
+               return ItemListFragment.createItemsFragment(TYPE_INCOMES);
+            }
+            case PAGE_COSTS:{
+                return ItemListFragment.createItemsFragment(TYPE_COSTS);
+            }
+            case PAGE_BALANSE:{
+                return ItemListFragment.createItemsFragment(TYPE_BALANSE);
+            }
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -24,12 +49,6 @@ public class MainPagesAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        if(position==0)
-            return "Costs";
-        else if(position==1)
-            return "Incomes";
-        else if(position==2)
-            return "Balanse";
-            return null;
+        return mTabTitles[position];
     }
 }

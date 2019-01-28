@@ -7,7 +7,15 @@
     <string name="dollar_item">$</string>
     <string name="budget">Budget</string>
     <string name="price_pattern">%1$s $</string>
-    <string name="costs">Costs</string>
-    <string name="incomes">Incomes</string>
-    <string name="balanse">Balanse</string>
+    <string name="tab_costs">Costs</string>
+    <string name="tab_incomes">Incomes</string>
+    <string name="tab_balanse">Balanse</string>
+    <string-array name="tab_title">
+        <item>@string/tab_incomes</item>
+        <item>@string/tab_costs</item>
+        <item>@string/tab_balanse</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
