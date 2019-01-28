@@ -7,4 +7,7 @@
     <string name="dollar_item">$</string>
     <string name="budget">Budget</string>
     <string name="price_pattern">%1$s $</string>
+    <string name="costs">Costs</string>
+    <string name="incomes">Incomes</string>
+    <string name="balanse">Balanse</string>
 </resources>
