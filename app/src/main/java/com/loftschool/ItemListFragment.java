@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemListFragment extends Fragment {
 
     public static ItemListFragment createItemsFragment(int type){
@@ -54,5 +57,13 @@ public class ItemListFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.item_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+
+        loadItems();
+    }
+
+    private void loadItems() {
+        List<Item> items = new ArrayList<>();
+        items.add(new Item("adsj",34));
+        mAdapter.setData(items);
     }
 }

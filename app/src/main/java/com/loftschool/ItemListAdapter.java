@@ -14,10 +14,6 @@ class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.RecordViewHol
     private List<Item> mData = new ArrayList<>();
 
 
-    public ItemListAdapter() {
-        createData();
-    }
-
     @NonNull
     @Override
     public ItemListAdapter.RecordViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -38,31 +34,8 @@ class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.RecordViewHol
         return mData.size();
     }
 
-    private void createData() {
-        mData.add(new Item("Milk",1));
-        mData.add(new Item("Bread",4));
-        mData.add(new Item("Eggs",3));
-        mData.add(new Item("Water",1));
-        mData.add(new Item("Bear",2));
-        mData.add(new Item("Chocolate", (float) 2.3));
-        mData.add(new Item("asd",1));
-        mData.add(new Item("Courses",10));
-        mData.add(new Item("Milk",1));
-        mData.add(new Item("Bread",4));
-        mData.add(new Item("Eggs",3));
-        mData.add(new Item("Water",1));
-        mData.add(new Item("Bear",2));
-        mData.add(new Item("Chocolate", (float) 2.3));
-        mData.add(new Item("asd",1));
-        mData.add(new Item("Courses",10));
-        mData.add(new Item("Milk",1));
-        mData.add(new Item("Bread",4));
-        mData.add(new Item("Eggs",3));
-        mData.add(new Item("Water",1));
-        mData.add(new Item("Bear",2));
-        mData.add(new Item("Chocolate", (float) 2.3));
-        mData.add(new Item("asd",1));
-        mData.add(new Item("Courses",10));
+    public void setData(List<Item> data){
+      this.mData= data;
     }
 
      static class RecordViewHolder extends RecyclerView.ViewHolder{
