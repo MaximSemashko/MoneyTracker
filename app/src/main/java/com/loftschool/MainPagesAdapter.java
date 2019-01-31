@@ -6,9 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import static com.loftschool.ItemListFragment.TYPE_BALANSE;
-import static com.loftschool.ItemListFragment.TYPE_COSTS;
-import static com.loftschool.ItemListFragment.TYPE_INCOMES;
+import static com.loftschool.Item.TYPE_BALANSE;
+import static com.loftschool.Item.TYPE_COSTS;
+import static com.loftschool.Item.TYPE_INCOMES;
 
 public class MainPagesAdapter extends FragmentPagerAdapter {
     private static final int PAGE_INCOMES = 0;

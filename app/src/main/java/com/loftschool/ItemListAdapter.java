@@ -36,6 +36,7 @@ class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.RecordViewHol
 
     public void setData(List<Item> data){
       this.mData= data;
+      notifyDataSetChanged();
     }
 
      static class RecordViewHolder extends RecyclerView.ViewHolder{
@@ -49,8 +50,8 @@ class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.RecordViewHol
             mItemPrice=itemView.findViewById(R.id.record_price);
         }
         public void applyData(Item item){
-            mItemTitle.setText(item.getTitle());
-            mItemPrice.setText(String.valueOf(item.getPrice()));
+            mItemTitle.setText(item.name);
+            mItemPrice.setText(String.valueOf(item.price));
         }
     }
 }
