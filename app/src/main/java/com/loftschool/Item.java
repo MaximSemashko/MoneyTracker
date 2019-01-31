@@ -1,21 +1,23 @@
 package com.loftschool;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Item {
 
-    private final String title;
-    private final float price;
+    public static final String TYPE_INCOMES = "incomes";
+    public static final String TYPE_COSTS = "costs";
+    public static final String TYPE_BALANSE = "balanse";
+    public static final String TYPE_UNKNOWN = "unknown";
 
-    public Item(String title, float price) {
-        this.title = title;
+    public int id;
+    @SerializedName("name")
+    public String name;
+    public float price;
+    public String type;
+
+    public Item(String name, float price, String type) {
+        this.name = name;
         this.price = price;
+        this.type = type;
     }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
 }

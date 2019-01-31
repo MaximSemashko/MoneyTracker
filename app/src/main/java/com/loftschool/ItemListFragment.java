@@ -10,21 +10,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.loftschool.Item.TYPE_INCOMES;
+import static com.loftschool.Item.TYPE_UNKNOWN;
+
 public class ItemListFragment extends Fragment {
 
-    public static ItemListFragment createItemsFragment(int type){
+    private static final String TAG = "ItemListFragment";
+    public static ItemListFragment createItemsFragment(String type){
         ItemListFragment fragment = new ItemListFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(TYPE_KEY, TYPE_INCOMES);
+        bundle.putString(TYPE_KEY, TYPE_INCOMES);
         fragment.setArguments(bundle);
         return fragment;
     }
-    public static final int TYPE_INCOMES = 1;
-    public static final int TYPE_COSTS = 2;
-    public static final int TYPE_BALANSE = 3;
-    public static final int TYPE_UNKNOWN = -1;
+
     public static final String TYPE_KEY = "type";
-    private int type = TYPE_INCOMES;
+    private String type = TYPE_INCOMES;
+
+    private Api mApi;
+    private App mApp;
 
     private RecyclerView mRecyclerView;
     private ItemListAdapter mAdapter;
@@ -35,10 +45,14 @@ public class ItemListFragment extends Fragment {
         mAdapter= new ItemListAdapter();
 
         Bundle bundle=getArguments();
-        type = bundle.getInt(TYPE_KEY,TYPE_UNKNOWN);
+        type = bundle.getString(TYPE_KEY,TYPE_UNKNOWN);
 
-        if(type==TYPE_UNKNOWN)
+        if(type.equals(TYPE_UNKNOWN))
             throw new IllegalArgumentException("Unknown type");
+
+        mApp = (App) getActivity().getApplication();
+
+        mApi = mApp.getApi();
     }
 
     @Nullable
@@ -54,5 +68,103 @@ public class ItemListFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.item_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+
+        loadItems();
     }
+    private void loadItems(){
+        Call<List<Item>> call = mApi.getItems(type);
+        call.enqueue(new Callback<List<Item>>() {
+            @Override
+            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
+                mAdapter.setData(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Item>> call, Throwable t) {
+
+            }
+        });
+    }
+
+//    @SuppressLint("StaticFieldLeak")
+//    private void loadItems(){
+//        AsyncTask<Void,Void,List<Item>> asyncTask = new AsyncTask<Void,Void,List<Item>>(){
+//            @Override
+//            protected List<Item> doInBackground(Void... voids) {
+//                Call<List<Item>> call = mApi.getItems(type);
+//                try {
+//                    List<Item> items =  call.execute()
+//                            .body();
+//                    return items;
+//                }
+//                catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                return null;
+//            }
+//
+//            //main thread
+//            @Override
+//            protected void onPreExecute() {
+//                super.onPreExecute();
+//                Log.d(TAG, "onPreExecute: "+Thread.currentThread().getName());
+//            }
+//
+//
+//            @Override
+//            protected void onPostExecute(List<Item> items) {
+//                super.onPostExecute(items);
+//                if(items!=null)
+//                    mAdapter.setData(items);
+//            }
+//        };
+//    asyncTask.execute();
+//    }
+//    private void loadItems() {
+//        new LoadItemsTask(new Handler(callback)).start();
+//    }
+//
+//    private final static int DATA_LOADED = 123;
+//    private Handler.Callback callback = new Handler.Callback() {
+//        @Override
+//        public boolean handleMessage(Message msg) {
+//         if(msg.what==DATA_LOADED){
+//             List<Item> items = (List<Item>)msg.obj;
+//             mAdapter.setData(items);
+//         }
+//         return true;
+//        }
+//    };
+//
+//    private class LoadItemsTask implements Runnable{
+//
+//        private Thread thread;
+//        private Handler handler;
+//
+//        public LoadItemsTask(Handler handler){
+//            thread = new Thread(new LoadItemsTask(new Handler()));
+//            this.handler = handler;
+//        }
+//
+//        public void start(){
+//            thread.start();
+//        }
+//
+//        @Override
+//        public void run() {
+//
+//            Call<List<Item>> call = mApi.getItems(type);
+//
+//            try {
+//                List<Item> items =  call.execute()
+//                        .body();
+//
+//               handler.obtainMessage(DATA_LOADED,items).sendToTarget();
+//
+//            }
+//            catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }
