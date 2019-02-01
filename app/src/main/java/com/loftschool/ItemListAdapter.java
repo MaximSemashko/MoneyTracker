@@ -28,6 +28,10 @@ class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.RecordViewHol
         recordViewHolder.applyData(item);
     }
 
+    public void addItem(Item item){
+        mData.add(item);
+        notifyItemInserted(mData.size());
+    }
 
     @Override
     public int getItemCount() {

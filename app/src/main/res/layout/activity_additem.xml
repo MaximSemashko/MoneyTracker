@@ -6,7 +6,19 @@
     android:orientation="vertical"
     android:background="@drawable/bg_pattern"
     tools:context="com.loftschool.AddItemActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:elevation="8dp"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:id="@+id/toolbar"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize">
+
+    </android.support.v7.widget.Toolbar>
+
     <LinearLayout
+        android:elevation="4dp"
         android:orientation="horizontal"
         android:background="@color/textColorWhite"
         android:layout_width="match_parent"
