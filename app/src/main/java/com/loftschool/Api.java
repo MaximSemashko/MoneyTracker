@@ -12,7 +12,7 @@ public interface Api {
     @GET("/items")
     Call<List<Item>> getItems(@Query("type") String type);
 
-    @POST("/items")
+    @POST("items/add")
     Call<List<Item>> addItems();
 
 }

@@ -1,11 +1,17 @@
 package com.loftschool;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +37,7 @@ public class ItemListFragment extends Fragment {
     }
 
     public static final String TYPE_KEY = "type";
+    private static final int ADD_ITEM_REQUEST_CODE = 123;
     private String type = TYPE_INCOMES;
 
     private Api mApi;
@@ -38,6 +45,8 @@ public class ItemListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private ItemListAdapter mAdapter;
+    private FloatingActionButton mFab;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,9 +77,41 @@ public class ItemListFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.item_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+        mFab = view.findViewById(R.id.fab);
 
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: FAB");
+                Intent intent = new Intent(getContext(),AddItemActivity.class);
+                intent.putExtra(AddItemActivity.TYPE_KEY,type);
+                startActivityForResult(intent,ADD_ITEM_REQUEST_CODE);
+            }
+        });
+
+        swipeRefreshLayout = view.findViewById(R.id.refresh);
+        swipeRefreshLayout.setColorSchemeColors(Color.BLUE,Color.CYAN,Color.GREEN);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadItems();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         loadItems();
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_ITEM_REQUEST_CODE
+                && resultCode == Activity.RESULT_OK){
+            Item item = (Item) data.getParcelableExtra("item");
+            mAdapter.addItem(item);
+            Log.i(TAG, "onActivityResult: "+item.name+" "+item.price);
+        }
+    }
+
     private void loadItems(){
         Call<List<Item>> call = mApi.getItems(type);
         call.enqueue(new Callback<List<Item>>() {
@@ -81,11 +122,11 @@ public class ItemListFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Item>> call, Throwable t) {
-
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
-    }
 
+    }
 //    @SuppressLint("StaticFieldLeak")
 //    private void loadItems(){
 //        AsyncTask<Void,Void,List<Item>> asyncTask = new AsyncTask<Void,Void,List<Item>>(){
