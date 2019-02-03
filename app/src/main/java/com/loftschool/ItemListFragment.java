@@ -6,13 +6,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -37,7 +40,7 @@ public class ItemListFragment extends Fragment {
     }
 
     public static final String TYPE_KEY = "type";
-    private static final int ADD_ITEM_REQUEST_CODE = 123;
+    public static final int ADD_ITEM_REQUEST_CODE = 123;
     private String type = TYPE_INCOMES;
 
     private Api mApi;
@@ -45,13 +48,14 @@ public class ItemListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private ItemListAdapter mAdapter;
-    private FloatingActionButton mFab;
+
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAdapter= new ItemListAdapter();
+        mAdapter.setListener(new AdaptenListener());
 
         Bundle bundle=getArguments();
         type = bundle.getString(TYPE_KEY,TYPE_UNKNOWN);
@@ -77,17 +81,7 @@ public class ItemListFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.item_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
-        mFab = view.findViewById(R.id.fab);
 
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick: FAB");
-                Intent intent = new Intent(getContext(),AddItemActivity.class);
-                intent.putExtra(AddItemActivity.TYPE_KEY,type);
-                startActivityForResult(intent,ADD_ITEM_REQUEST_CODE);
-            }
-        });
 
         swipeRefreshLayout = view.findViewById(R.id.refresh);
         swipeRefreshLayout.setColorSchemeColors(Color.BLUE,Color.CYAN,Color.GREEN);
@@ -104,11 +98,11 @@ public class ItemListFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_ITEM_REQUEST_CODE
-                && resultCode == Activity.RESULT_OK){
+        if (requestCode == ADD_ITEM_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             Item item = (Item) data.getParcelableExtra("item");
-            mAdapter.addItem(item);
-            Log.i(TAG, "onActivityResult: "+item.name+" "+item.price);
+            if(item.type.equals(type)) {
+                mAdapter.addItem(item);
+            }
         }
     }
 
@@ -127,85 +121,70 @@ public class ItemListFragment extends Fragment {
         });
 
     }
-//    @SuppressLint("StaticFieldLeak")
-//    private void loadItems(){
-//        AsyncTask<Void,Void,List<Item>> asyncTask = new AsyncTask<Void,Void,List<Item>>(){
-//            @Override
-//            protected List<Item> doInBackground(Void... voids) {
-//                Call<List<Item>> call = mApi.getItems(type);
-//                try {
-//                    List<Item> items =  call.execute()
-//                            .body();
-//                    return items;
-//                }
-//                catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                return null;
-//            }
-//
-//            //main thread
-//            @Override
-//            protected void onPreExecute() {
-//                super.onPreExecute();
-//                Log.d(TAG, "onPreExecute: "+Thread.currentThread().getName());
-//            }
-//
-//
-//            @Override
-//            protected void onPostExecute(List<Item> items) {
-//                super.onPostExecute(items);
-//                if(items!=null)
-//                    mAdapter.setData(items);
-//            }
-//        };
-//    asyncTask.execute();
-//    }
-//    private void loadItems() {
-//        new LoadItemsTask(new Handler(callback)).start();
-//    }
-//
-//    private final static int DATA_LOADED = 123;
-//    private Handler.Callback callback = new Handler.Callback() {
-//        @Override
-//        public boolean handleMessage(Message msg) {
-//         if(msg.what==DATA_LOADED){
-//             List<Item> items = (List<Item>)msg.obj;
-//             mAdapter.setData(items);
-//         }
-//         return true;
-//        }
-//    };
-//
-//    private class LoadItemsTask implements Runnable{
-//
-//        private Thread thread;
-//        private Handler handler;
-//
-//        public LoadItemsTask(Handler handler){
-//            thread = new Thread(new LoadItemsTask(new Handler()));
-//            this.handler = handler;
-//        }
-//
-//        public void start(){
-//            thread.start();
-//        }
-//
-//        @Override
-//        public void run() {
-//
-//            Call<List<Item>> call = mApi.getItems(type);
-//
-//            try {
-//                List<Item> items =  call.execute()
-//                        .body();
-//
-//               handler.obtainMessage(DATA_LOADED,items).sendToTarget();
-//
-//            }
-//            catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+
+    // ACTION MODE
+
+    private ActionMode mActionMode;
+
+    private void removeSelectedItems(){
+        for(int i = mAdapter.getSelectedItems().size()-1;i>=0;i--)
+            mAdapter.remove(mAdapter.getSelectedItems().get(i));
+    }
+
+    private class AdaptenListener  implements ItemsAdapterListener{
+
+        @Override
+        public void OnItemClick(Item item, int position) {
+        if(isInActionMode())
+            toogleSelection(position);
+        }
+
+        @Override
+        public void OnItemLongClick(Item item, int position) {
+            if(isInActionMode()) {
+                return;
+            }
+            mActionMode =  ((AppCompatActivity) getActivity()).startSupportActionMode(mCallback);
+            toogleSelection(position);
+        }
+
+        private void toogleSelection(int position){
+           mAdapter.toogleSelection(position);
+        }
+
+        private boolean isInActionMode(){
+            return mActionMode!=null;
+        }
+    }
+
+    private ActionMode.Callback mCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            MenuInflater inflater = new MenuInflater(getContext());
+            inflater.inflate(R.menu.items_menu,menu);
+            mActionMode = actionMode;
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            switch (menuItem.getItemId()){
+                case R.id.remove:
+                    removeSelectedItems();
+                    break;
+            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode) {
+            mAdapter.clearSelection();
+            mActionMode = null;
+        }
+    };
 }
