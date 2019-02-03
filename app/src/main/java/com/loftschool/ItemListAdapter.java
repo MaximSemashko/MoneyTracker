@@ -2,6 +2,7 @@ package com.loftschool;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,12 @@ import java.util.List;
 
 class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.RecordViewHolder>{
     private List<Item> mData = new ArrayList<>();
+    private ItemsAdapterListener listener = null;
 
+    public void setListener(ItemsAdapterListener listener){
+        this.listener = listener;
+
+    }
 
     @NonNull
     @Override
@@ -25,7 +31,7 @@ class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.RecordViewHol
     @Override
     public void onBindViewHolder(@NonNull ItemListAdapter.RecordViewHolder recordViewHolder, int i) {
         Item item = mData.get(i);
-        recordViewHolder.applyData(item);
+        recordViewHolder.applyData(item,i,listener,selections.get(i,false));
     }
 
     public void addItem(Item item){
@@ -43,7 +49,35 @@ class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.RecordViewHol
       notifyDataSetChanged();
     }
 
-     static class RecordViewHolder extends RecyclerView.ViewHolder{
+    private SparseBooleanArray selections = new SparseBooleanArray();
+
+    public void toogleSelection(int position) {
+        if(selections.get(position,false)) {
+            selections.delete(position);
+        }
+       else
+           selections.put(position,true);
+       notifyItemInserted(position);
+    }
+
+    void clearSelection(){
+        selections.clear();;
+        notifyDataSetChanged();
+    }
+
+    List<Integer> getSelectedItems(){
+        List<Integer> items = new ArrayList<>(selections.size());
+        for(int i=0; i <selections.size();i++)
+            items.add(selections.keyAt(i));
+        return items;
+    }
+
+    Item remove(int pos){
+        final Item item = mData.remove(pos);
+        notifyItemRemoved(pos);
+        return item;
+    }
+    static class RecordViewHolder extends RecyclerView.ViewHolder{
 
         private final TextView mItemTitle;
         private final TextView mItemPrice;
@@ -53,9 +87,29 @@ class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.RecordViewHol
             mItemTitle=itemView.findViewById(R.id.record_title);
             mItemPrice=itemView.findViewById(R.id.record_price);
         }
-        public void applyData(Item item){
+        public void applyData(final Item item, final int position, final ItemsAdapterListener listener, boolean selection){
             mItemTitle.setText(item.name);
             mItemPrice.setText(String.valueOf(item.price));
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener!=null)
+                        listener.OnItemClick(item,position);
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                   if(listener != null){
+                       listener.OnItemClick(item,position) ;
+                   }
+                   return true;
+                }
+            });
+
+            itemView.setActivated(selection);
         }
     }
 }

@@ -6,14 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import static com.loftschool.Item.TYPE_BALANSE;
 import static com.loftschool.Item.TYPE_COSTS;
 import static com.loftschool.Item.TYPE_INCOMES;
 
 public class MainPagesAdapter extends FragmentPagerAdapter {
-    private static final int PAGE_INCOMES = 0;
-    private static final int PAGE_COSTS = 1;
-    private static final int PAGE_BALANSE = 2;
+    public static final int PAGE_INCOMES = 0;
+    public static final int PAGE_COSTS = 1;
+    public static final int PAGE_BALANSE = 2;
 
     private String [] mTabTitles;
 
@@ -34,7 +33,7 @@ public class MainPagesAdapter extends FragmentPagerAdapter {
                 return ItemListFragment.createItemsFragment(TYPE_COSTS);
             }
             case PAGE_BALANSE:{
-                return ItemListFragment.createItemsFragment(TYPE_BALANSE);
+                return new BalanseFragment();
             }
             default:
                 return null;
