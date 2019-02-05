@@ -55,7 +55,7 @@ public class ItemListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAdapter= new ItemListAdapter();
-        mAdapter.setListener(new AdaptenListener());
+        mAdapter.setListener(new AdapterListener());
 
         Bundle bundle=getArguments();
         type = bundle.getString(TYPE_KEY,TYPE_UNKNOWN);
@@ -129,9 +129,10 @@ public class ItemListFragment extends Fragment {
     private void removeSelectedItems(){
         for(int i = mAdapter.getSelectedItems().size()-1;i>=0;i--)
             mAdapter.remove(mAdapter.getSelectedItems().get(i));
+        mActionMode.finish();
     }
 
-    private class AdaptenListener  implements ItemsAdapterListener{
+    private class AdapterListener implements ItemsAdapterListener{
 
         @Override
         public void OnItemClick(Item item, int position) {
@@ -175,7 +176,7 @@ public class ItemListFragment extends Fragment {
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
             switch (menuItem.getItemId()){
                 case R.id.remove:
-                    removeSelectedItems();
+                    showDialog();
                     break;
             }
             return false;
@@ -187,4 +188,9 @@ public class ItemListFragment extends Fragment {
             mActionMode = null;
         }
     };
+
+    private void showDialog() {
+        ConfiramtionDialog confiramtionDialog =new ConfiramtionDialog();
+        confiramtionDialog.show(getFragmentManager(),"Confiramtion dialog");
+    }
 }

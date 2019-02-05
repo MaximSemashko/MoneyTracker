@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setSupportActionBar(toolbar);
 
         mViewPager = findViewById(R.id.viewPager);
-        mViewPager.setOnPageChangeListener(this);
+        mViewPager.addOnPageChangeListener(this);
         mMainPagesAdapter = new MainPagesAdapter(getSupportFragmentManager(),this);
         mViewPager.setAdapter(mMainPagesAdapter);
 
