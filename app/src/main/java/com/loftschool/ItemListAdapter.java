@@ -51,32 +51,40 @@ class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.RecordViewHol
 
     private SparseBooleanArray selections = new SparseBooleanArray();
 
-    public void toogleSelection(int position) {
-        if(selections.get(position,false)) {
+
+    public void toggleSelection(int position) {
+        if (selections.get(position, false)) {
             selections.delete(position);
+        } else {
+            selections.put(position, true);
         }
-       else
-           selections.put(position,true);
-       notifyItemInserted(position);
+        notifyItemChanged(position);
     }
 
-    void clearSelection(){
-        selections.clear();;
+    void clearSelections() {
+        selections.clear();
         notifyDataSetChanged();
     }
 
-    List<Integer> getSelectedItems(){
+    int getSelectedItemCount() {
+        return selections.size();
+    }
+
+    List<Integer> getSelectedItems() {
         List<Integer> items = new ArrayList<>(selections.size());
-        for(int i=0; i <selections.size();i++)
+        for (int i = 0; i < selections.size(); i++) {
             items.add(selections.keyAt(i));
+        }
         return items;
     }
 
-    Item remove(int pos){
+    Item remove(int pos) {
         final Item item = mData.remove(pos);
         notifyItemRemoved(pos);
         return item;
     }
+
+
     static class RecordViewHolder extends RecyclerView.ViewHolder{
 
         private final TextView mItemTitle;
@@ -103,7 +111,7 @@ class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.RecordViewHol
                 @Override
                 public boolean onLongClick(View v) {
                    if(listener != null){
-                       listener.OnItemClick(item,position) ;
+                       listener.OnItemLongClick(item,position) ;
                    }
                    return true;
                 }
