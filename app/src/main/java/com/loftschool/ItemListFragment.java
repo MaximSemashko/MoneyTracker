@@ -137,7 +137,7 @@ public class ItemListFragment extends Fragment {
         @Override
         public void OnItemClick(Item item, int position) {
         if(isInActionMode())
-            toogleSelection(position);
+            toggleSelection(position);
         }
 
         @Override
@@ -146,11 +146,11 @@ public class ItemListFragment extends Fragment {
                 return;
             }
             mActionMode =  ((AppCompatActivity) getActivity()).startSupportActionMode(mCallback);
-            toogleSelection(position);
+            toggleSelection(position);
         }
 
-        private void toogleSelection(int position){
-           mAdapter.toogleSelection(position);
+        private void toggleSelection(int position){
+           mAdapter.toggleSelection(position);
         }
 
         private boolean isInActionMode(){
@@ -184,7 +184,7 @@ public class ItemListFragment extends Fragment {
 
         @Override
         public void onDestroyActionMode(ActionMode actionMode) {
-            mAdapter.clearSelection();
+            mAdapter.clearSelections();
             mActionMode = null;
         }
     };
