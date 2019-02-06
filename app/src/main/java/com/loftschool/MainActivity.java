@@ -2,12 +2,14 @@ package com.loftschool;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private MainPagesAdapter mMainPagesAdapter;
     private TabLayout mTabLayout;
     private FloatingActionButton mFab;
+    private ActionMode mActionMode = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,4 +107,26 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                         break;
         }
     }
+
+    @Override
+    public void onSupportActionModeStarted(@NonNull ActionMode mode) {
+        super.onSupportActionModeStarted(mode);
+        mFab.hide();
+        mActionMode = mode;
+        }
+
+    @Override
+    public void onSupportActionModeFinished(@NonNull ActionMode mode) {
+        super.onSupportActionModeFinished(mode);
+        mFab.show();
+        mActionMode = null;
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Intent intent = new Intent(this,AuthActivity.class);
+        startActivity(intent);
+    }
 }
+
