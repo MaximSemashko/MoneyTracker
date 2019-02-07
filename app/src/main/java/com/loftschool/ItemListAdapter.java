@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.loftschool.Api.Item;
+
 import java.util.ArrayList;
 import java.util.List;
 

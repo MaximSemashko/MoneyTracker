@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.loftschool.Api.Item;
+
 public class AddItemActivity extends AppCompatActivity {
 
     private static final String TAG = "AddItemActivity";
@@ -74,7 +76,7 @@ public class AddItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String nameValue = mItemName.getText().toString();
-                float priceValue = Float.parseFloat((mItemPrice.getText().toString()));
+                String priceValue = mItemPrice.getText().toString();
 
                 Intent intent = new Intent();
                 Item item = new Item(nameValue,priceValue,type);
