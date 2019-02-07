@@ -1,4 +1,4 @@
-package com.loftschool;
+package com.loftschool.Api;
 
 import com.google.gson.annotations.SerializedName;
 

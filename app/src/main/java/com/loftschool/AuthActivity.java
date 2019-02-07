@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -15,6 +15,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.loftschool.Api.Api;
+import com.loftschool.Api.AuthResult;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,7 +28,7 @@ public class AuthActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 321;
 
     private GoogleSignInClient mGoogleSignInClient;
-    private Button mSignInButton;
+    private TextView mSignInTextView;
     private Api mApi;
 
     @Override
@@ -43,9 +45,9 @@ public class AuthActivity extends AppCompatActivity {
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        mSignInButton = findViewById(R.id.login_button);
+        mSignInTextView = findViewById(R.id.login);
         
-        mSignInButton.setOnClickListener(new View.OnClickListener() {
+        mSignInTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signIn();
@@ -109,15 +111,16 @@ public class AuthActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<AuthResult> call, Response<AuthResult> response) {
                 AuthResult authResult = response.body();
-                Log.i(TAG, "onResponse: "+authResult.token);
+                ((App) getApplication()).saveAuthToken(authResult.token);
+                finish();
             }
 
             @Override
             public void onFailure(Call<AuthResult> call, Throwable t) {
-                showError("Auth failed");
+                Log.i(TAG, "onFailure: "+"Auth failed " + t.getMessage());
+                showError("Auth failed " + t.getMessage());
             }
         });
-        Log.i(TAG, "id = "+id);
     }
 
     private void showSuccess() {

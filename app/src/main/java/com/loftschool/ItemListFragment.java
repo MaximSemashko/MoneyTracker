@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,14 +20,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.loftschool.Api.AddItemResult;
+import com.loftschool.Api.Api;
+import com.loftschool.Api.Item;
+
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.loftschool.Item.TYPE_INCOMES;
-import static com.loftschool.Item.TYPE_UNKNOWN;
+import static com.loftschool.Api.Item.TYPE_INCOMES;
+import static com.loftschool.Api.Item.TYPE_UNKNOWN;
 
 public class ItemListFragment extends Fragment {
 
@@ -101,7 +106,7 @@ public class ItemListFragment extends Fragment {
         if (requestCode == ADD_ITEM_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             Item item = (Item) data.getParcelableExtra("item");
             if(item.type.equals(type)) {
-                mAdapter.addItem(item);
+                addItem(item);
             }
         }
     }
@@ -119,7 +124,24 @@ public class ItemListFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+    }
 
+    private void addItem(final Item item){
+        Call<AddItemResult> call = mApi.addItem(item.price,item.name,item.type);
+        call.enqueue(new Callback<AddItemResult>() {
+            @Override
+            public void onResponse(Call<AddItemResult> call, Response<AddItemResult> response) {
+                AddItemResult addItemResult = response.body();
+                if(addItemResult.status.equals("success")){
+                    mAdapter.addItem(item);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddItemResult> call, Throwable t) {
+                Log.i(TAG, "onFailure: "+ t.getMessage());
+            }
+        });
     }
 
     // ACTION MODE

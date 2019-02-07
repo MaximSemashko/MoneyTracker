@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.loftschool.Api.Item;
+
 import static com.loftschool.ItemListFragment.ADD_ITEM_REQUEST_CODE;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
@@ -38,8 +40,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         mViewPager = findViewById(R.id.viewPager);
         mViewPager.addOnPageChangeListener(this);
-        mMainPagesAdapter = new MainPagesAdapter(getSupportFragmentManager(),this);
-        mViewPager.setAdapter(mMainPagesAdapter);
 
         mTabLayout = findViewById(R.id.tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -121,12 +121,21 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mFab.show();
         mActionMode = null;
     }
-    @Override
     protected void onResume() {
         super.onResume();
 
-        Intent intent = new Intent(this,AuthActivity.class);
-        startActivity(intent);
+        if (((App) getApplication()).isAuthorized()) {
+            initTabs();
+        } else {
+            Intent intent = new Intent(this, AuthActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    private void initTabs() {
+        mMainPagesAdapter = new MainPagesAdapter(getSupportFragmentManager(),this);
+        mViewPager.setAdapter(mMainPagesAdapter);
+
     }
 }
 
