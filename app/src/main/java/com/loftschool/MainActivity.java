@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         mTabLayout = findViewById(R.id.tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
-
+        initTabs();
 
 
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -121,16 +121,16 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mFab.show();
         mActionMode = null;
     }
-    protected void onResume() {
-        super.onResume();
-
-        if (((App) getApplication()).isAuthorized()) {
-            initTabs();
-        } else {
-            Intent intent = new Intent(this, AuthActivity.class);
-            startActivity(intent);
-        }
-    }
+//    protected void onResume() {
+//        super.onResume();
+//
+//        if (((App) getApplication()).isAuthorized()) {
+//            initTabs();
+//        } else {
+//            Intent intent = new Intent(this, AuthActivity.class);
+//            startActivity(intent);
+//        }
+//    }
 
     private void initTabs() {
         mMainPagesAdapter = new MainPagesAdapter(getSupportFragmentManager(),this);
