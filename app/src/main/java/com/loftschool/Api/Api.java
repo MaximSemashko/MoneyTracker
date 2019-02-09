@@ -1,5 +1,7 @@
 package com.loftschool.Api;
 
+import com.loftschool.BalanseResult;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -19,4 +21,6 @@ public interface Api {
 
 //    @POST("items/remove?id=<id>")
 //    Call<RemoveItem> removeItem();
+    @GET("balanse")
+    Call<BalanseResult> balance();
 }

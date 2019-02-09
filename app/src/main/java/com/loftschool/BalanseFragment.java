@@ -10,12 +10,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class BalanseFragment extends Fragment {
+import com.loftschool.Api.Api;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class BalanseFragment extends Fragment {
+    private static final String TAG = "BalanseFragment";
     private TextView total;
     private TextView expense;
+    private DiagramView mDiagramView;
     private TextView income;
 
+    private Api api;
+    private App app;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        app = (App) getActivity().getApplication();
+        api = app.getApi();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -28,17 +45,40 @@ public class BalanseFragment extends Fragment {
         total = view.findViewById(R.id.total);
         expense=view.findViewById(R.id.expense);
         income=view.findViewById(R.id.income);
-
+        mDiagramView = view.findViewById(R.id.diagram);
         updateData();
     }
 
-    private void updateData() {
-        BalanseResult result = new BalanseResult();
-        result.expense = 4500;
-        result.income = 6000;
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if(isVisibleToUser){
+//            Log.i(TAG, "setUserVisibleHint: ");
+//            updateData();
+//        }
+//    }
 
-        total.setText(String.valueOf(result.income-result.expense));
-        expense.setText(String.valueOf(result.expense));
-        income.setText(String.valueOf(result.income));
+    private void updateData() {
+
+        Call<BalanseResult> call = api.balance();
+
+        call.enqueue(new Callback<BalanseResult>() {
+            @Override
+            public void onResponse(Call<BalanseResult> call, Response<BalanseResult> response) {
+                BalanseResult result = response.body();
+
+                total.setText( result.income - result.expense);
+                expense.setText(result.expense);
+                income.setText( result.income);
+                mDiagramView.update(result.income, result.expense);
+            }
+
+            @Override
+            public void onFailure(Call<BalanseResult> call, Throwable t) {
+
+            }
+        });
+
+
     }
 }
